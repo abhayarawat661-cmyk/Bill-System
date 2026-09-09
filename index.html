@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bill </title>
+  <style>
+    .p {
+      height: 400px;
+      width: 350px;
+      background-color: rgb(255, 117, 117);
+      margin-top: 50px;
+      margin-left: 350px;
+      padding: 20px;
+      border: 2px solid black;
+      border-radius: 15px;
+    }
+    .p  h1 {
+      color: black;
+    }
+    .p1 {
+      color: black;
+      margin-top: 10px;
+      margin-left: 20px;
+    }
+    .p111 {
+      color: black;
+      margin-top: 10px;
+      margin-left: 20px;
+           height: 30px;
+         width: 300px;
+               border-radius: 10px;
+    }
+    .p1111 {
+      color: black;
+           height: 30px;
+      margin-top: 10px;
+      margin-left: 20px;
+            border-radius: 10px;
+         width: 300px;
+    }
+    .p11 {
+      color: black;
+      margin-top: 10px;
+      height: 30px;
+      width: 300px;
+      margin-left: 20px;
+      border-radius: 10px;
+    }
+    #showbill {
+      margin-top: 20px;
+      padding: 10px;
+      background: #11a12b;
+      width: 400px;
+      margin-left: 350px;
+      display: none;
+    }
+  </style>
+</head>
+<body>``
+<div class="p">
+ <center> <h1 style="color: black;">MALL OF DEHRADUN</h1></center>
+  <label class="p1">PRODUCT NAME </label><br>
+  <input type="text" id="pd1" class="p11  " placeholder="Enter The Product Name"><br><br>
+  <label class="p1">AMOUNT</label><br>
+  <input type="text" id="pd" class="p11" placeholder="Enter The Product Price"><br><br>
+  <button onclick="adds()" class="p1111" style="background-color: rgb(255, 114, 187);" style="color: black;">ADD TO CART</button><br><br>
+  <button onclick="bills()" class="p111">SHOW TOTAL BILL</button>
+</div>
+
+<div id="showbill"></div>
+
+<script>
+  var bill=[];
+
+  function adds() {
+    let pname = document.getElementById("pd1").value;
+    let pamount = parseFloat(document.getElementById("pd").value);
+
+    if (pname && !isNaN(pamount)) {
+      bill.push({ name: pname, amount: pamount });
+    }
+
+    document.getElementById("pd1").value='';
+    document.getElementById("pd").value='';
+  }
+
+  function bills() {
+    let ans="";
+    let sum=0;
+
+    for (let i=0;i<bill.length;i++) {
+      ans+=(i+1)+ "="+bill[i].name+"-"+bill[i].amount+"<br>";
+      sum+=bill[i].amount;
+    }
+
+    ans+="<br>Total Bill="+sum;
+
+    let box=document.getElementById("showbill");
+    box.innerHTML=ans;
+    box.style.display="block";
+
+  }
+</script>
+</body>
+</html>
