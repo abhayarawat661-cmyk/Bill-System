@@ -1,105 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Bill </title>
-  <style>
-    .p {
-      height: 400px;
-      width: 350px;
-      background-color: rgb(255, 117, 117);
-      margin-top: 50px;
-      margin-left: 350px;
-      padding: 20px;
-      border: 2px solid black;
-      border-radius: 15px;
-    }
-    .p  h1 {
-      color: black;
-    }
-    .p1 {
-      color: black;
-      margin-top: 10px;
-      margin-left: 20px;
-    }
-    .p111 {
-      color: black;
-      margin-top: 10px;
-      margin-left: 20px;
-           height: 30px;
-         width: 300px;
-               border-radius: 10px;
-    }
-    .p1111 {
-      color: black;
-           height: 30px;
-      margin-top: 10px;
-      margin-left: 20px;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mall of Dehradun - Billing System</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f1f1f1;
+        }
+
+        .container {
+            width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ff9999;
+            border: 2px solid black;
+            border-radius: 15px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        input {
+            width: 95%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid black;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add {
+            background-color: green;
+            color: white;
+            width: 100%;
+        }
+
+        .delete {
+            background-color: red;
+            color: white;
+        }
+
+        .edit {
+            background-color: blue;
+            color: white;
+        }
+
+        .clear {
+            background-color: black;
+            color: white;
+        }
+
+        #showbill {
+            width: 400px;
+            margin: auto;
+            padding: 15px;
+            background-color: white;
             border-radius: 10px;
-         width: 300px;
-    }
-    .p11 {
-      color: black;
-      margin-top: 10px;
-      height: 30px;
-      width: 300px;
-      margin-left: 20px;
-      border-radius: 10px;
-    }
-    #showbill {
-      margin-top: 20px;
-      padding: 10px;
-      background: #11a12b;
-      width: 400px;
-      margin-left: 350px;
-      display: none;
-    }
-  </style>
+        }
+    </style>
 </head>
-<body>``
-<div class="p">
- <center> <h1 style="color: black;">MALL OF DEHRADUN</h1></center>
-  <label class="p1">PRODUCT NAME </label><br>
-  <input type="text" id="pd1" class="p11  " placeholder="Enter The Product Name"><br><br>
-  <label class="p1">AMOUNT</label><br>
-  <input type="text" id="pd" class="p11" placeholder="Enter The Product Price"><br><br>
-  <button onclick="adds()" class="p1111" style="background-color: rgb(255, 114, 187);" style="color: black;">ADD TO CART</button><br><br>
-  <button onclick="bills()" class="p111">SHOW TOTAL BILL</button>
+
+<body>
+
+<div class="container">
+
+    <h1>MALL OF DEHRADUN</h1>
+
+    <label>PRODUCT NAME</label>
+    <input type="text" id="pd1" placeholder="Enter Product Name">
+
+    <label>PRODUCT PRICE</label>
+    <input type="number" id="pd" placeholder="Enter Product Price">
+
+    <button class="add" onclick="adds()">ADD TO CART</button>
+
 </div>
 
 <div id="showbill"></div>
 
 <script>
-  var bill=[];
 
-  function adds() {
-    let pname = document.getElementById("pd1").value;
-    let pamount = parseFloat(document.getElementById("pd").value);
+    var bill = [];
 
-    if (pname && !isNaN(pamount)) {
-      bill.push({ name: pname, amount: pamount });
+    // Add Product
+    function adds() {
+
+        let pname = document.getElementById("pd1").value;
+        let price = Number(document.getElementById("pd").value);
+
+        if (pname.trim() === "" || price <= 0 || !Number.isFinite(price)) {
+            alert("Please enter valid product name and price");
+            return;
+        }
+
+        bill.push({
+            name: pname,
+            amount: price
+        });
+
+        document.getElementById("pd1").value = "";
+        document.getElementById("pd").value = "";
+
+        bills();
     }
 
-    document.getElementById("pd1").value='';
-    document.getElementById("pd").value='';
-  }
+    // Display Bill
+    function bills() {
 
-  function bills() {
-    let ans="";
-    let sum=0;
+        let box = document.getElementById("showbill");
 
-    for (let i=0;i<bill.length;i++) {
-      ans+=(i+1)+ "="+bill[i].name+"-"+bill[i].amount+"<br>";
-      sum+=bill[i].amount;
+        box.innerHTML = "";
+
+        let heading = document.createElement("h2");
+        heading.textContent = "Shopping Cart";
+        box.appendChild(heading);
+
+        let sum = 0;
+
+        for (let i = 0; i < bill.length; i++) {
+
+            sum += bill[i].amount;
+
+            let item = document.createElement("div");
+
+            let name = document.createElement("span");
+            name.textContent = (i + 1) + ". " +
+                bill[i].name + " - ₹" + bill[i].amount;
+
+            // Edit Button
+            let editBtn = document.createElement("button");
+            editBtn.textContent = "Edit";
+            editBtn.className = "edit";
+            editBtn.onclick = function() {
+                editProduct(i);
+            };
+
+            // Delete Button
+            let deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.className = "delete";
+            deleteBtn.onclick = function() {
+                deleteProduct(i);
+            };
+
+            item.appendChild(name);
+            item.appendChild(editBtn);
+            item.appendChild(deleteBtn);
+
+            box.appendChild(item);
+        }
+
+        let total = document.createElement("h3");
+        total.textContent = "Total Bill: ₹" + sum;
+
+        box.appendChild(total);
+
+        // Clear Cart Button
+        let clearBtn = document.createElement("button");
+        clearBtn.textContent = "Clear Cart";
+        clearBtn.className = "clear";
+        clearBtn.onclick = clearCart;
+
+        box.appendChild(clearBtn);
     }
 
-    ans+="<br>Total Bill="+sum;
+    // Delete Product
+    function deleteProduct(index) {
 
-    let box=document.getElementById("showbill");
-    box.innerHTML=ans;
-    box.style.display="block";
+        bill.splice(index, 1);
 
-  }
+        bills();
+    }
+
+    // Edit Product
+    function editProduct(index) {
+
+        let newName = prompt("Enter new product name", bill[index].name);
+
+        if (newName === null || newName.trim() === "") {
+            return;
+        }
+
+        let newPrice = prompt("Enter new price", bill[index].amount);
+
+        if (newPrice === null || newPrice.trim() === "") {
+            return;
+        }
+
+        let price = Number(newPrice);
+
+        if (!Number.isFinite(price) || price <= 0) {
+            alert("Enter a valid price");
+            return;
+        }
+
+        bill[index].name = newName.trim();
+        bill[index].amount = price;
+
+        bills();
+    }
+
+    // Clear Cart
+    function clearCart() {
+
+        bill = [];
+
+        bills();
+    }
+
 </script>
+
 </body>
 </html>
